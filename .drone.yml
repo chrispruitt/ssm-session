@@ -1,0 +1,47 @@
+---
+kind: pipeline
+type: docker
+name: publish docker
+
+trigger:
+  ref:
+    - refs/heads/master
+    - refs/tags/*
+
+steps:
+  - name: publish
+    image: plugins/docker
+    settings:
+      username: chrispruitt
+      password:
+        from_secret: docker_password
+      repo: chrispruitt/ssm-session-cli
+      tags: latest
+      squash: true
+      auto_tag: true
+      cache_from:
+        - "chrispruitt/ssm-session-cli:latest"
+
+---
+kind: pipeline
+type: docker
+name: publish docker slim
+
+trigger:
+  ref:
+    - refs/heads/master
+    - refs/tags/*
+
+steps:
+  - name: publish
+    image: plugins/docker
+    settings:
+      username: chrispruitt
+      password:
+        from_secret: docker_password
+      repo: chrispruitt/ssm-session-cli
+      auto_tag_suffix: slim
+      dockerfile: slim.Dockerfile
+      squash: true
+      auto_tag: true
+## TODO add goreleaser pipeline for binary releases
