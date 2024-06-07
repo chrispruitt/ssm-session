@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
@@ -22,7 +23,14 @@ func GetInstances() ([]string, error) {
 
 	pageNum := 0
 
-	err := ec2Client.DescribeInstancesPages(&ec2.DescribeInstancesInput{},
+	err := ec2Client.DescribeInstancesPages(&ec2.DescribeInstancesInput{
+		Filters: []*ec2.Filter{
+			{
+				Name:   aws.String("instance-state-name"),
+				Values: []*string{aws.String("running")},
+			},
+		},
+	},
 		func(page *ec2.DescribeInstancesOutput, b bool) bool {
 			pageNum++
 			for _, res := range page.Reservations {
