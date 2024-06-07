@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
-	ssmsession "github.com/chrispruitt/ssm-session-cli/lib"
+	ssmsession "github.com/chrispruitt/ssm-session/lib"
 	"github.com/spf13/cobra"
 )
 

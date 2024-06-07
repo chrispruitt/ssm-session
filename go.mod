@@ -1,4 +1,4 @@
-module github.com/chrispruitt/ssm-session-cli
+module github.com/chrispruitt/ssm-session
 
 go 1.18
 

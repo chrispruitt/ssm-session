@@ -1,4 +1,4 @@
-ssm-session-cli
+ssm-session
 
 Usage:
 

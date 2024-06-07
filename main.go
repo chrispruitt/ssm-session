@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/chrispruitt/ssm-session-cli/cmd"
+	"github.com/chrispruitt/ssm-session/cmd"
 )
 
-// version of ssm-session-cli. Overwritten during build
+// version of ssm-session. Overwritten during build
 var version = "development"
 
 func main() {
