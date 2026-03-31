@@ -17,6 +17,16 @@ type SsmSessionInput struct {
 	InstanceTemplate string
 }
 
+func CheckDependencies() error {
+	if _, err := exec.LookPath("aws"); err != nil {
+		return fmt.Errorf("aws CLI not found: install it from https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html")
+	}
+	if _, err := exec.LookPath("session-manager-plugin"); err != nil {
+		return fmt.Errorf("session-manager-plugin not found: install it from https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html")
+	}
+	return nil
+}
+
 func GetInstances() ([]string, error) {
 
 	instances := []*ec2.Instance{}

@@ -25,6 +25,10 @@ var SsmSessionCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start an ssm session on an ec2 instance using a selectable prompt",
 	Run: func(cmd *cobra.Command, args []string) {
+		if err := ssmsession.CheckDependencies(); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 		ssmsession.Init(profile)
 		promptInstance()
 

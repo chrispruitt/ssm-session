@@ -1,8 +1,8 @@
 build:
-	goreleaser release --snapshot --rm-dist
+	goreleaser release --snapshot --clean
 
 release:
-	goreleaser release --rm-dist
+	goreleaser release --clean
 
 docker-build:
 	docker build --platform=linux/amd64 -t chrispruitt/ssm-session . 
