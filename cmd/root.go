@@ -8,6 +8,7 @@ import (
 
 var (
 	cluster string
+	profile string
 )
 
 // Configure the root command
@@ -23,6 +24,7 @@ var rootCmd = &cobra.Command{
 // Execute validates input the Cobra CLI
 func Execute(version string) {
 	rootCmd.Version = version
+	rootCmd.PersistentFlags().StringVar(&profile, "profile", "", "AWS profile to use")
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal(err)
 	}

@@ -9,6 +9,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 type SsmSessionInput struct {
@@ -48,6 +49,30 @@ func GetInstances() ([]string, error) {
 			return pageNum <= 100
 		})
 	return instancesTemplates, err
+}
+
+func GetManagedInstances() ([]string, error) {
+	templates := []string{}
+
+	input := &ssm.DescribeInstanceInformationInput{
+		Filters: []*ssm.InstanceInformationStringFilter{
+			{
+				Key:    aws.String("ResourceType"),
+				Values: []*string{aws.String("ManagedInstance")},
+			},
+		},
+	}
+
+	err := ssmClient.DescribeInstanceInformationPages(input, func(page *ssm.DescribeInstanceInformationOutput, lastPage bool) bool {
+		for _, info := range page.InstanceInformationList {
+			instanceId := aws.StringValue(info.InstanceId)
+			computerName := aws.StringValue(info.ComputerName)
+			templates = append(templates, fmt.Sprintf("%s %s", instanceId, computerName))
+		}
+		return !lastPage
+	})
+
+	return templates, err
 }
 
 // aws ssm start-session --target $INSTANCE_ID

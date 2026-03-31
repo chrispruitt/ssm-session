@@ -25,6 +25,7 @@ var SsmSessionCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start an ssm session on an ec2 instance using a selectable prompt",
 	Run: func(cmd *cobra.Command, args []string) {
+		ssmsession.Init(profile)
 		promptInstance()
 
 		err := ssmsession.StartSsmSession(&ssmSessionInput)
@@ -42,9 +43,17 @@ func promptInstance() {
 		os.Exit(1)
 	}
 
+	managed, err := ssmsession.GetManagedInstances()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	all := append(instances, managed...)
+
 	clusterPrompt := &survey.Select{
 		Message: "Select an instance:",
-		Options: instances,
+		Options: all,
 	}
 
 	err = survey.AskOne(clusterPrompt, &ssmSessionInput.InstanceTemplate, survey.WithPageSize(20))
